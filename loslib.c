@@ -140,16 +140,19 @@
 
 
 static int os_execute (lua_State *L) {
-  const char *cmd = luaL_optstring(L, 1, NULL);
-  int stat;
-  errno = 0;
-  stat = l_system(cmd);
-  if (cmd != NULL)
-    return luaL_execresult(L, stat);
-  else {
-    lua_pushboolean(L, stat);  /* true if there is a shell */
-    return 1;
-  }
+#if 0
+	const char* cmd = luaL_optstring(L, 1, NULL);
+	int stat;
+	errno = 0;
+	stat = l_system(cmd);
+	if (cmd != NULL)
+		return luaL_execresult(L, stat);
+	else {
+		lua_pushboolean(L, stat);  /* true if there is a shell */
+		return 1;
+	}
+#endif
+    lua_pushboolean(L, 0);
 }
 
 
@@ -167,18 +170,24 @@ static int os_rename (lua_State *L) {
 
 
 static int os_tmpname (lua_State *L) {
+	return luaL_error(L, "unable to generate a unique filename");
+#if 0
   char buff[LUA_TMPNAMBUFSIZE];
   int err;
   lua_tmpnam(buff, err);
   if (l_unlikely(err))
-    return luaL_error(L, "unable to generate a unique filename");
   lua_pushstring(L, buff);
   return 1;
+#endif
 }
 
 
 static int os_getenv (lua_State *L) {
+#if defined(__PROSPERO__)
+  lua_pushstring(L, "");
+#else
   lua_pushstring(L, getenv(luaL_checkstring(L, 1)));  /* if NULL push nil */
+#endif
   return 1;
 }
 

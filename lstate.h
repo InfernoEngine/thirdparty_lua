@@ -127,8 +127,12 @@ struct lua_longjmp;  /* defined in ldo.c */
 ** is thread safe
 */
 #if !defined(l_signalT)
+#if defined(__PROSPERO__)
+#define l_signalT	int
+#else
 #include <signal.h>
 #define l_signalT	sig_atomic_t
+#endif
 #endif
 
 
