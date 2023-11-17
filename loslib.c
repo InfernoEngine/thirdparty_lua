@@ -151,8 +151,10 @@ static int os_execute (lua_State *L) {
 		lua_pushboolean(L, stat);  /* true if there is a shell */
 		return 1;
 	}
+#else
+  lua_pushboolean(L, 0);
+  return 1;
 #endif
-    lua_pushboolean(L, 0);
 }
 
 
